@@ -1,0 +1,97 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:1:1-35:12
+INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:1:1-35:12
+INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:1:1-35:12
+INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:1:1-35:12
+	package
+		INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:2:5-77
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:2:22-74
+uses-permission#android.permission.SCHEDULE_EXACT_ALARM
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:3:5-79
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:3:22-76
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:4:5-81
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:4:22-78
+application
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:6:5-34:19
+INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:6:5-34:19
+	android:extractNativeLibs
+		INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml
+	android:label
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:8:9-37
+	android:allowBackup
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:7:9-35
+	android:theme
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:9:9-72
+	android:usesCleartextTraffic
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:10:9-45
+activity#com.amanaque.trabajo.MainActivity
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:11:9-19:20
+	android:exported
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:14:13-36
+	android:configChanges
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:13:13-59
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:12:13-41
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:15:13-18:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:16:17-69
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:16:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:17:17-77
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:17:27-74
+receiver#com.amanaque.trabajo.DailyReminderReceiver
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:20:9-22:40
+	android:exported
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:22:13-37
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:21:13-50
+receiver#com.amanaque.trabajo.ReminderRescheduleReceiver
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:23:9-33:20
+	android:enabled
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:25:13-35
+	android:exported
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:26:13-36
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:24:13-55
+intent-filter#action:name:android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED+action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.TIMEZONE_CHANGED+action:name:android.intent.action.TIME_SET
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:27:13-32:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:28:17-79
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:28:25-76
+action#android.intent.action.TIME_SET
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:29:17-73
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:29:25-70
+action#android.intent.action.TIMEZONE_CHANGED
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:30:17-81
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:30:25-78
+action#android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED
+ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:31:17-107
+	android:name
+		ADDED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml:31:25-104
+uses-sdk
+INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\PC\OneDrive\Desktop\programacion\amanaque\app\src\main\AndroidManifest.xml

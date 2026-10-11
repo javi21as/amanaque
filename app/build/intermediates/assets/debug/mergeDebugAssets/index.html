@@ -1,0 +1,968 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f6f2">
+  <title>Mi almanaque</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f7f6f2;
+      color: #20251f;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --green: #27734d;
+      --muted: #737970;
+      --line: #e9e8e1;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: max(26px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom));
+    }
+
+    main { width: min(100%, 520px); margin: 0 auto; }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .space-menu { position: relative; display: inline-block; }
+    .space-menu-button {
+      padding: 0;
+      border: 0;
+      color: var(--green);
+      background: transparent;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .space-menu-button::after { content: "⌄"; margin-left: 6px; font-size: 15px; }
+    .space-menu-options {
+      position: absolute;
+      z-index: 2;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 150px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 8px 24px #20251f1a;
+    }
+    .space-menu-options[hidden], [hidden] { display: none; }
+    .space-menu-options button {
+      width: 100%;
+      padding: 10px;
+      border: 0;
+      border-radius: 8px;
+      color: #30372f;
+      background: transparent;
+      font: inherit;
+      text-align: left;
+    }
+    .space-menu-options button:hover { background: #f1f1ed; }
+
+    h1 { margin: 7px 0 5px; font-size: 30px; letter-spacing: -.04em; }
+    .subtitle { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    .summary {
+      margin-top: 22px;
+      padding: 21px;
+      border-radius: 22px;
+      color: white;
+      background: linear-gradient(135deg, #236d49, #39865c);
+      box-shadow: 0 12px 30px #276f4b26;
+    }
+
+    .summary-label { font-size: 13px; opacity: .84; }
+    .summary-finances { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 7px 0 17px; }
+    .finance-total { min-width: 0; }
+    .total { overflow-wrap: anywhere; margin: 4px 0 0; font-size: 26px; font-weight: 760; letter-spacing: -.04em; }
+    .expense-label { color: #ffe0dd; }
+    .expense-total { color: #ffaaa3; }
+    .summary-bottom { display: flex; gap: 24px; font-size: 13px; }
+    .summary-bottom strong { display: block; margin-bottom: 2px; font-size: 16px; }
+
+    .month-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 25px 0 13px;
+    }
+
+    .month-row h2 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+    .month-controls { display: flex; gap: 8px; }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .month-button {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: #30372f;
+      background: white;
+      font-size: 20px;
+    }
+
+    .weekdays, .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 7px;
+    }
+
+    .weekdays { margin-bottom: 8px; }
+    .weekdays span { padding: 4px 0; color: var(--muted); font-size: 11px; font-weight: 650; text-align: center; }
+    .day {
+      display: flex;
+      min-width: 0;
+      min-height: 65px;
+      position: relative;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 5px 1px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: #363b35;
+      background: #fff;
+    }
+
+    .day-number { font-size: 14px; font-weight: 650; }
+    .day-state { font-size: 9px; font-weight: 700; }
+    .day.unmarked .day-state { color: #a0a39c; }
+    .day.worked { border-color: #a9d2b8; background: #eaf5ed; }
+    .day.worked .day-number, .day.worked .day-state { color: #226742; }
+    .day.rest { border-color: #e5e1d7; background: #f0efe9; }
+    .day.rest .day-state { color: #74776e; }
+    .day.today { outline: 2px solid #d5a749; outline-offset: 1px; }
+    .day.has-reminder::after {
+      position: absolute;
+      top: 5px;
+      right: 6px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #d5a749;
+      content: "";
+    }
+    .day:active, .month-button:active, .action-button:active { transform: scale(.97); }
+
+    .legend { display: flex; gap: 15px; margin: 14px 0 0; color: var(--muted); font-size: 11px; }
+    .legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-green { background: #39865c; }
+    .dot-gray { background: #b8b6aa; }
+
+    .tip {
+      margin-top: 22px;
+      padding: 15px 16px;
+      border: 1px solid #e9e2ce;
+      border-radius: 16px;
+      background: #fffdf7;
+      color: #5e5b50;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .tip strong { color: #34352f; }
+    .notice { min-height: 18px; margin-top: 12px; color: #a33c33; font-size: 12px; }
+    .reminder-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 15px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+    }
+    .reminder-copy { color: var(--muted); font-size: 12px; line-height: 1.45; }
+    .reminder-copy strong { display: block; margin-bottom: 3px; color: #30372f; font-size: 13px; }
+    .reminder-button {
+      flex: 0 0 auto;
+      padding: 9px 11px;
+      border: 0;
+      border-radius: 11px;
+      color: white;
+      background: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .reminder-button:disabled { color: #42634e; background: #eaf5ed; cursor: default; }
+
+    .objectives-view { margin-top: 24px; }
+    .objectives-view h2 { margin: 0 0 6px; font-size: 22px; }
+    .objectives-intro { margin: 0 0 18px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .objective-form {
+      display: grid;
+      gap: 10px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: white;
+    }
+    .objective-form label { margin: 0; }
+    .objective-form input, .objective-form select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d9ded7;
+      border-radius: 12px;
+      color: #20251f;
+      background: #fff;
+      font: inherit;
+      font-size: 16px;
+    }
+    .objective-form button {
+      min-height: 44px;
+      margin-top: 2px;
+      border: 0;
+      border-radius: 13px;
+      color: white;
+      background: var(--green);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .objective-progress { height: 8px; margin-top: 10px; overflow: hidden; border-radius: 99px; background: #e9eee9; }
+    .objective-progress span { display: block; height: 100%; border-radius: inherit; background: var(--green); }
+    .objective-progress-label { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
+    .objectives-list { display: grid; gap: 10px; margin-top: 18px; }
+    .objective-card {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+    }
+    .objective-card input { width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--green); }
+    .objective-details { min-width: 0; flex: 1; }
+    .objective-title { display: block; overflow-wrap: anywhere; font-size: 14px; font-weight: 650; }
+    .objective-card.completed .objective-title { color: var(--muted); text-decoration: line-through; }
+    .objective-period { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .objective-delete {
+      padding: 7px;
+      border: 0;
+      border-radius: 8px;
+      color: #8a473f;
+      background: #fbf1ef;
+      font-size: 12px;
+    }
+    .objectives-empty { padding: 18px; border-radius: 16px; color: var(--muted); background: #f0efe9; font-size: 13px; text-align: center; }
+
+    dialog {
+      width: min(calc(100% - 32px), 390px);
+      padding: 22px;
+      border: 0;
+      border-radius: 22px;
+      color: #20251f;
+      background: #fff;
+      box-shadow: 0 18px 60px #11182738;
+    }
+
+    dialog::backdrop { background: #17231b70; }
+    dialog h2 { margin: 0 0 6px; font-size: 20px; }
+    dialog p { margin: 0 0 18px; color: var(--muted); font-size: 13px; }
+    label { display: block; margin: 0 0 7px; font-size: 13px; font-weight: 650; }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #d9ded7;
+      border-radius: 12px;
+      color: #20251f;
+      background: #fff;
+      font: inherit;
+      font-size: 16px;
+    }
+
+    .dialog-error { min-height: 17px; margin-top: 6px; color: #a33c33; font-size: 12px; }
+    .dialog-actions { display: flex; flex-direction: column; gap: 9px; margin-top: 13px; }
+    .action-button { min-height: 45px; border: 0; border-radius: 13px; font-size: 14px; font-weight: 700; }
+    .primary { color: white; background: var(--green); }
+    .secondary { color: #55594f; background: #f1f1ed; }
+    .day-field { margin-top: 13px; }
+    .day-field input { margin-top: 6px; }
+    .expense-save { width: 100%; min-height: 40px; margin-top: 8px; border: 0; border-radius: 12px; color: #9d3932; background: #fbefed; font-size: 13px; font-weight: 700; }
+    .day-reminders { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .reminders-toggle { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 11px; color: #394239; background: #f8f8f5; font-size: 13px; font-weight: 650; text-align: left; }
+    .day-reminder-list { display: grid; gap: 7px; margin: 9px 0 0; padding: 0; list-style: none; }
+    .day-reminder-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; border-radius: 10px; background: #f4f3ed; font-size: 13px; overflow-wrap: anywhere; }
+    .day-reminder-item button { flex: 0 0 auto; padding: 5px 7px; border: 0; border-radius: 7px; color: #8a473f; background: #fbf1ef; font-size: 11px; }
+    .reminder-form { display: flex; gap: 7px; margin-top: 9px; }
+    .reminder-form input { min-width: 0; padding: 10px; font-size: 14px; }
+    .reminder-form button { flex: 0 0 auto; padding: 0 12px; border: 0; border-radius: 11px; color: white; background: var(--green); font-size: 13px; font-weight: 700; }
+
+    @media (max-width: 360px) {
+      body { padding-right: 12px; padding-left: 12px; }
+      .weekdays, .calendar { gap: 5px; }
+      .day { min-height: 59px; border-radius: 12px; }
+      .day-state { font-size: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <nav class="space-menu" aria-label="Mi espacio">
+        <button class="space-menu-button" id="space-menu-button" type="button" aria-expanded="false" aria-controls="space-menu-options">Mi espacio</button>
+        <div class="space-menu-options" id="space-menu-options" hidden>
+          <button id="calendar-nav" type="button">Calendario</button>
+          <button id="objectives-nav" type="button">Objetivos</button>
+        </div>
+      </nav>
+      <h1>Mi almanaque</h1>
+      <p class="subtitle">Cada día que avanzas cuenta. Lleva aquí el registro de tu trabajo.</p>
+    </header>
+
+    <div id="calendar-view">
+    <section class="summary" aria-label="Resumen del mes">
+      <div class="summary-finances">
+        <div class="finance-total">
+          <div class="summary-label">Ganancias del mes</div>
+          <div class="total" id="monthly-total">0</div>
+        </div>
+        <div class="finance-total">
+          <div class="summary-label expense-label">Gastos del mes</div>
+          <div class="total expense-total" id="monthly-expenses">0</div>
+        </div>
+      </div>
+      <div class="summary-bottom">
+        <div><strong id="worked-count">0</strong>días trabajados</div>
+        <div><strong id="rest-count">0</strong>días de descanso</div>
+      </div>
+    </section>
+
+    <section aria-label="Calendario">
+      <div class="month-row">
+        <h2 id="month-title"></h2>
+        <div class="month-controls">
+          <button class="month-button" id="previous-month" type="button" aria-label="Mes anterior">‹</button>
+          <button class="month-button" id="next-month" type="button" aria-label="Mes siguiente">›</button>
+        </div>
+      </div>
+      <div class="weekdays" aria-hidden="true">
+        <span>Lu</span><span>Ma</span><span>Mi</span><span>Ju</span><span>Vi</span><span>Sá</span><span>Do</span>
+      </div>
+      <div class="calendar" id="calendar"></div>
+      <div class="legend">
+        <span><i class="dot dot-green"></i>Trabajado</span>
+        <span><i class="dot dot-gray"></i>No trabajado</span>
+      </div>
+    </section>
+
+    <aside class="tip"><strong>Vas paso a paso.</strong> Cada jornada suma. Registra tu día y celebra todo lo que vas consiguiendo.</aside>
+    <aside class="reminder-card" aria-label="Recordatorio diario">
+      <div class="reminder-copy">
+        <strong>Recordatorio diario · 10:00 p. m.</strong>
+        <span id="reminder-status">Activa el aviso para recibir una notificación cada día.</span>
+      </div>
+      <button class="reminder-button" id="reminder-button" type="button">Activar</button>
+    </aside>
+    <div class="notice" id="notice" role="status" aria-live="polite"></div>
+    </div>
+
+    <section class="objectives-view" id="objectives-view" aria-label="Objetivos" hidden>
+      <h2>Mis objetivos</h2>
+      <p class="objectives-intro">Crea objetivos personales o metas de ganancias mensuales y anuales. El progreso de las metas de ganancias se calcula con los días trabajados que registras.</p>
+      <form class="objective-form" id="objective-form">
+        <label for="objective-kind">Tipo de objetivo</label>
+        <select id="objective-kind">
+          <option value="personal">Objetivo personal</option>
+          <option value="income">Meta de ganancias</option>
+        </select>
+        <label for="objective-title" id="objective-title-label">¿Qué quieres lograr?</label>
+        <input id="objective-title" type="text" maxlength="80" placeholder="Por ejemplo, trabajar 5 días" required>
+        <div id="objective-target-field" hidden>
+          <label for="objective-target">¿Cuánto quieres ganar?</label>
+          <input id="objective-target" type="number" min="0.01" step="any" inputmode="decimal" placeholder="Escribe tu meta de ganancias">
+        </div>
+        <label for="objective-period">Periodo</label>
+        <select id="objective-period">
+          <option value="weekly">Esta semana</option>
+          <option value="monthly">Este mes</option>
+          <option value="yearly">Este año</option>
+        </select>
+        <button type="submit">Agregar objetivo</button>
+      </form>
+      <div class="dialog-error" id="objective-error" role="status" aria-live="polite"></div>
+      <div class="objectives-list" id="objectives-list"></div>
+    </section>
+  </main>
+
+  <dialog id="day-dialog">
+    <form id="day-form">
+      <h2 id="dialog-title">Registrar día</h2>
+      <p id="dialog-description"></p>
+      <label for="earning-input">¿Cuánto ganaste ese día?</label>
+      <input id="earning-input" type="number" min="0" step="any" inputmode="decimal" placeholder="Escribe la ganancia" required>
+      <div class="day-field">
+        <label for="expense-input">Gastos del día</label>
+        <input id="expense-input" type="number" min="0" step="any" inputmode="decimal" placeholder="Escribe el gasto (opcional)">
+        <button class="expense-save" id="expense-save-button" type="button">Guardar gasto</button>
+      </div>
+      <div class="dialog-error" id="dialog-error" role="alert"></div>
+      <div class="dialog-actions">
+        <button class="action-button primary" type="submit">Guardar como trabajado</button>
+        <button class="action-button secondary" id="rest-button" type="button">Marcar como no trabajado</button>
+        <button class="action-button secondary" id="cancel-button" type="button">Cancelar</button>
+      </div>
+    </form>
+    <section class="day-reminders" aria-label="Recordatorios del día">
+      <button class="reminders-toggle" id="reminders-toggle" type="button" aria-expanded="false" aria-controls="day-reminder-list">Ver recordatorios</button>
+      <ul class="day-reminder-list" id="day-reminder-list" hidden></ul>
+      <form class="reminder-form" id="reminder-form" hidden>
+        <input id="reminder-input" type="text" maxlength="100" placeholder="Ej.: pagar alquiler" aria-label="Nuevo recordatorio" required>
+        <button type="submit">Agregar</button>
+      </form>
+    </section>
+  </dialog>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = "mi-almanaque-registros-v1";
+      const OBJECTIVES_STORAGE_KEY = "mi-almanaque-objetivos-v1";
+      const REMINDERS_STORAGE_KEY = "mi-almanaque-recordatorios-v1";
+      const monthNames = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+      ];
+      const today = new Date();
+      let visibleYear = today.getFullYear();
+      let visibleMonth = today.getMonth();
+      let selectedDate = null;
+      let entries = loadEntries();
+      let objectives = loadObjectives();
+      let reminders = loadReminders();
+
+      const calendar = document.getElementById("calendar");
+      const dialog = document.getElementById("day-dialog");
+      const form = document.getElementById("day-form");
+      const input = document.getElementById("earning-input");
+      const expenseInput = document.getElementById("expense-input");
+      const notice = document.getElementById("notice");
+      const objectivesList = document.getElementById("objectives-list");
+
+      function loadEntries() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return {};
+
+        const parsed = JSON.parse(stored);
+        if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+          throw new Error("Los registros guardados no tienen un formato válido.");
+        }
+        return parsed;
+      }
+
+      function loadObjectives() {
+        const stored = localStorage.getItem(OBJECTIVES_STORAGE_KEY);
+        if (!stored) return [];
+
+        const parsed = JSON.parse(stored);
+        if (!Array.isArray(parsed) || parsed.some((objective) =>
+          !objective || typeof objective.id !== "string"
+          || typeof objective.title !== "string"
+          || !["weekly", "monthly", "yearly"].includes(objective.period)
+          || (objective.type !== undefined && !["personal", "income"].includes(objective.type))
+          || (objective.type === "income" && (!Number.isFinite(objective.targetAmount) || objective.targetAmount <= 0))
+          || typeof objective.createdOn !== "string"
+          || typeof objective.completed !== "boolean"
+        )) {
+          throw new Error("Los objetivos guardados no tienen un formato válido.");
+        }
+        return parsed;
+      }
+
+      function loadReminders() {
+        const stored = localStorage.getItem(REMINDERS_STORAGE_KEY);
+        if (!stored) return {};
+
+        const parsed = JSON.parse(stored);
+        if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)
+          || Object.values(parsed).some((items) => !Array.isArray(items)
+            || items.some((item) => !item || typeof item.id !== "string" || typeof item.text !== "string"))) {
+          throw new Error("Los recordatorios guardados no tienen un formato válido.");
+        }
+        return parsed;
+      }
+
+      function dateKey(year, month, day) {
+        return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      }
+
+      function formatAmount(amount) {
+        return new Intl.NumberFormat("es", { maximumFractionDigits: 2 }).format(amount);
+      }
+
+      function persist(nextEntries) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(nextEntries));
+          entries = nextEntries;
+          notice.textContent = "";
+          render();
+          renderObjectives();
+          return true;
+        } catch (error) {
+          notice.textContent = "No se pudo guardar el registro en este dispositivo.";
+          return false;
+        }
+      }
+
+      function persistObjectives(nextObjectives) {
+        try {
+          localStorage.setItem(OBJECTIVES_STORAGE_KEY, JSON.stringify(nextObjectives));
+          objectives = nextObjectives;
+          document.getElementById("objective-error").textContent = "";
+          renderObjectives();
+          return true;
+        } catch (error) {
+          document.getElementById("objective-error").textContent =
+            "No se pudieron guardar los objetivos en este dispositivo.";
+          return false;
+        }
+      }
+
+      function persistReminders(nextReminders) {
+        try {
+          localStorage.setItem(REMINDERS_STORAGE_KEY, JSON.stringify(nextReminders));
+          reminders = nextReminders;
+          document.getElementById("dialog-error").textContent = "";
+          render();
+          renderDayReminders();
+          return true;
+        } catch (error) {
+          document.getElementById("dialog-error").textContent =
+            "No se pudieron guardar los recordatorios en este dispositivo.";
+          return false;
+        }
+      }
+
+      function saveExpense() {
+        const expense = expenseInput.value === "" ? 0 : Number(expenseInput.value);
+        if (!Number.isFinite(expense) || expense < 0) {
+          document.getElementById("dialog-error").textContent = "Escribe un gasto válido (0 o más).";
+          return;
+        }
+        const current = entries[selectedDate] || {};
+        const nextEntries = { ...entries, [selectedDate]: { ...current, expense } };
+        if (persist(nextEntries)) {
+          document.getElementById("dialog-error").textContent = "";
+        }
+      }
+
+      function renderDayReminders() {
+        const list = document.getElementById("day-reminder-list");
+        const toggle = document.getElementById("reminders-toggle");
+        const items = reminders[selectedDate] || [];
+        list.replaceChildren();
+        toggle.textContent = `${list.hidden ? "Ver" : "Ocultar"} recordatorios (${items.length})`;
+
+        items.forEach((reminder) => {
+          const item = document.createElement("li");
+          const text = document.createElement("span");
+          const removeButton = document.createElement("button");
+          item.className = "day-reminder-item";
+          text.textContent = reminder.text;
+          removeButton.type = "button";
+          removeButton.textContent = "Eliminar";
+          removeButton.setAttribute("aria-label", `Eliminar recordatorio: ${reminder.text}`);
+          removeButton.addEventListener("click", () => {
+            const nextReminders = { ...reminders };
+            nextReminders[selectedDate] = items.filter((entry) => entry.id !== reminder.id);
+            if (nextReminders[selectedDate].length === 0) delete nextReminders[selectedDate];
+            persistReminders(nextReminders);
+          });
+          item.append(text, removeButton);
+          list.appendChild(item);
+        });
+      }
+
+      function formatObjectivePeriod(objective) {
+        const [year, month, day] = objective.createdOn.split("-").map(Number);
+        const date = new Date(year, month - 1, day);
+        if (objective.period === "monthly") {
+          return `Objetivo del mes · ${monthNames[month - 1]} ${year}`;
+        }
+        if (objective.period === "yearly") {
+          return `Meta del año · ${year}`;
+        }
+
+        const weekStart = new Date(date);
+        weekStart.setDate(date.getDate() - ((date.getDay() + 6) % 7));
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        const dateOptions = { day: "numeric", month: "short" };
+        const startLabel = new Intl.DateTimeFormat("es", dateOptions).format(weekStart);
+        const endLabel = new Intl.DateTimeFormat("es", {
+          day: "numeric", month: "short", year: "numeric"
+        }).format(weekEnd);
+        return `Objetivo semanal · ${startLabel} – ${endLabel}`;
+      }
+
+      function renderObjectives() {
+        objectivesList.replaceChildren();
+        if (objectives.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "objectives-empty";
+          empty.textContent = "Aún no tienes objetivos. Agrega uno para empezar.";
+          objectivesList.appendChild(empty);
+          return;
+        }
+
+        [...objectives]
+          .sort((first, second) => second.createdOn.localeCompare(first.createdOn))
+          .forEach((objective) => {
+            const card = document.createElement("div");
+            const details = document.createElement("div");
+            const title = document.createElement("span");
+            const period = document.createElement("span");
+            const removeButton = document.createElement("button");
+            const isIncomeGoal = objective.type === "income";
+            const progress = isIncomeGoal ? getIncomeGoalProgress(objective) : null;
+            const completed = isIncomeGoal ? progress >= objective.targetAmount : objective.completed;
+
+            card.className = `objective-card${completed ? " completed" : ""}`;
+            if (!isIncomeGoal) {
+              const checkbox = document.createElement("input");
+              checkbox.type = "checkbox";
+              checkbox.checked = objective.completed;
+              checkbox.setAttribute("aria-label", `Marcar "${objective.title}" como completado`);
+              checkbox.addEventListener("change", () => {
+                const nextObjectives = objectives.map((item) =>
+                  item.id === objective.id ? { ...item, completed: checkbox.checked } : item
+                );
+                persistObjectives(nextObjectives);
+              });
+              card.appendChild(checkbox);
+            }
+
+            details.className = "objective-details";
+            title.className = "objective-title";
+            title.textContent = isIncomeGoal
+              ? `${objective.title}: ${formatAmount(objective.targetAmount)}`
+              : objective.title;
+            period.className = "objective-period";
+            period.textContent = formatObjectivePeriod(objective);
+            details.append(title, period);
+            if (isIncomeGoal) {
+              const progressBar = document.createElement("div");
+              const progressFill = document.createElement("span");
+              const progressLabel = document.createElement("span");
+              const percent = Math.min(100, (progress / objective.targetAmount) * 100);
+              progressBar.className = "objective-progress";
+              progressBar.setAttribute("role", "progressbar");
+              progressBar.setAttribute("aria-label", `Progreso de ${objective.title}`);
+              progressBar.setAttribute("aria-valuemin", "0");
+              progressBar.setAttribute("aria-valuemax", String(objective.targetAmount));
+              progressBar.setAttribute("aria-valuenow", String(Math.min(progress, objective.targetAmount)));
+              progressFill.style.width = `${percent}%`;
+              progressBar.appendChild(progressFill);
+              progressLabel.className = "objective-progress-label";
+              progressLabel.textContent = `Ganado: ${formatAmount(progress)} de ${formatAmount(objective.targetAmount)}${completed ? " · ¡Meta alcanzada!" : ""}`;
+              details.append(progressBar, progressLabel);
+            }
+
+            removeButton.className = "objective-delete";
+            removeButton.type = "button";
+            removeButton.textContent = "Eliminar";
+            removeButton.setAttribute("aria-label", `Eliminar objetivo: ${objective.title}`);
+            removeButton.addEventListener("click", () => {
+              persistObjectives(objectives.filter((item) => item.id !== objective.id));
+            });
+
+            card.append(details, removeButton);
+            objectivesList.appendChild(card);
+          });
+      }
+
+      function getIncomeGoalProgress(objective) {
+        const [year, month] = objective.createdOn.split("-").map(Number);
+        const periodPrefix = objective.period === "yearly"
+          ? `${year}-`
+          : `${year}-${String(month).padStart(2, "0")}-`;
+        return Object.entries(entries).reduce((sum, [key, entry]) =>
+          key.startsWith(periodPrefix) && entry?.status === "worked"
+            ? sum + (Number(entry.amount) || 0)
+            : sum, 0);
+      }
+
+      function render() {
+        document.getElementById("month-title").textContent =
+          `${monthNames[visibleMonth][0].toUpperCase()}${monthNames[visibleMonth].slice(1)} ${visibleYear}`;
+
+        const firstWeekday = (new Date(visibleYear, visibleMonth, 1).getDay() + 6) % 7;
+        const daysInMonth = new Date(visibleYear, visibleMonth + 1, 0).getDate();
+        const monthEntries = [];
+        calendar.replaceChildren();
+
+        for (let blank = 0; blank < firstWeekday; blank += 1) {
+          const spacer = document.createElement("span");
+          spacer.setAttribute("aria-hidden", "true");
+          calendar.appendChild(spacer);
+        }
+
+        for (let day = 1; day <= daysInMonth; day += 1) {
+          const key = dateKey(visibleYear, visibleMonth, day);
+          const entry = entries[key];
+          const dayReminders = reminders[key] || [];
+          const button = document.createElement("button");
+          const number = document.createElement("span");
+          const state = document.createElement("span");
+          const isToday = visibleYear === today.getFullYear()
+            && visibleMonth === today.getMonth()
+            && day === today.getDate();
+
+          button.type = "button";
+          const dayState = entry?.status === "worked" ? "worked" : entry?.status === "rest" ? "rest" : "unmarked";
+          button.className = `day ${dayState}${isToday ? " today" : ""}${dayReminders.length ? " has-reminder" : ""}`;
+          button.setAttribute("aria-label", entry
+            ? `Día ${day}, ${entry.status === "worked" ? `trabajado, ganancia ${formatAmount(entry.amount)}` : entry.status === "rest" ? "no trabajado" : "sin estado registrado"}${dayReminders.length ? `, ${dayReminders.length} recordatorio(s)` : ""}`
+            : `Día ${day}, sin registrar${dayReminders.length ? `, ${dayReminders.length} recordatorio(s)` : ""}`);
+          number.className = "day-number";
+          number.textContent = String(day);
+          state.className = "day-state";
+          state.textContent = entry
+            ? (entry.status === "worked" ? formatAmount(entry.amount) : entry.status === "rest" ? "Descanso" : entry.expense ? "Gasto" : "·")
+            : "·";
+          button.append(number, state);
+          button.addEventListener("click", () => openDay(key, day, entry));
+          calendar.appendChild(button);
+
+          if (entry && entry.status === "worked") monthEntries.push(entry);
+        }
+
+        const total = monthEntries.reduce((sum, entry) => sum + entry.amount, 0);
+        const monthPrefix = `${visibleYear}-${String(visibleMonth + 1).padStart(2, "0")}-`;
+        const monthlyExpenses = Object.entries(entries).reduce((sum, [key, entry]) =>
+          key.startsWith(monthPrefix) ? sum + (Number(entry?.expense) || 0) : sum, 0);
+        const restDays = Object.keys(entries).filter((key) =>
+          key.startsWith(monthPrefix)
+          && entries[key]?.status === "rest"
+        ).length;
+        document.getElementById("monthly-total").textContent = formatAmount(total);
+        document.getElementById("monthly-expenses").textContent = formatAmount(monthlyExpenses);
+        document.getElementById("worked-count").textContent = String(monthEntries.length);
+        document.getElementById("rest-count").textContent = String(restDays);
+      }
+
+      function openDay(key, day, entry) {
+        selectedDate = key;
+        document.getElementById("dialog-title").textContent = `Día ${day}`;
+        document.getElementById("dialog-description").textContent =
+          `${day} de ${monthNames[visibleMonth]} de ${visibleYear}`;
+        document.getElementById("dialog-error").textContent = "";
+        input.value = entry?.status === "worked" ? String(entry.amount) : "";
+        expenseInput.value = entry?.expense ? String(entry.expense) : "";
+        const reminderList = document.getElementById("day-reminder-list");
+        reminderList.hidden = true;
+        document.getElementById("reminder-form").hidden = true;
+        document.getElementById("reminders-toggle").setAttribute("aria-expanded", "false");
+        renderDayReminders();
+        dialog.showModal();
+        if (!entry || entry.status !== "worked") input.focus();
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const amount = Number(input.value);
+        if (!Number.isFinite(amount) || amount < 0) {
+          document.getElementById("dialog-error").textContent = "Escribe una ganancia válida (0 o más).";
+          return;
+        }
+        const expense = expenseInput.value === "" ? (Number(entries[selectedDate]?.expense) || 0) : Number(expenseInput.value);
+        if (!Number.isFinite(expense) || expense < 0) {
+          document.getElementById("dialog-error").textContent = "Escribe un gasto válido (0 o más).";
+          return;
+        }
+        const nextEntries = { ...entries, [selectedDate]: { status: "worked", amount, expense } };
+        if (persist(nextEntries)) dialog.close();
+      });
+
+      document.getElementById("rest-button").addEventListener("click", () => {
+        const expense = expenseInput.value === "" ? (Number(entries[selectedDate]?.expense) || 0) : Number(expenseInput.value);
+        if (!Number.isFinite(expense) || expense < 0) {
+          document.getElementById("dialog-error").textContent = "Escribe un gasto válido (0 o más).";
+          return;
+        }
+        const nextEntries = { ...entries, [selectedDate]: { status: "rest", expense } };
+        if (persist(nextEntries)) dialog.close();
+      });
+
+      document.getElementById("expense-save-button").addEventListener("click", saveExpense);
+      document.getElementById("reminders-toggle").addEventListener("click", () => {
+        const list = document.getElementById("day-reminder-list");
+        const isVisible = list.hidden;
+        list.hidden = !isVisible;
+        document.getElementById("reminder-form").hidden = !isVisible;
+        document.getElementById("reminders-toggle").setAttribute("aria-expanded", String(isVisible));
+        renderDayReminders();
+      });
+      document.getElementById("reminder-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const reminderInput = document.getElementById("reminder-input");
+        const text = reminderInput.value.trim();
+        if (!text) {
+          document.getElementById("dialog-error").textContent = "Escribe el recordatorio que quieres guardar.";
+          return;
+        }
+        const currentReminders = reminders[selectedDate] || [];
+        const now = Date.now();
+        const reminder = { id: `${now}-${Math.random().toString(36).slice(2)}`, text };
+        if (persistReminders({ ...reminders, [selectedDate]: [...currentReminders, reminder] })) {
+          reminderInput.value = "";
+          document.getElementById("day-reminder-list").hidden = false;
+          document.getElementById("reminder-form").hidden = false;
+          document.getElementById("reminders-toggle").setAttribute("aria-expanded", "true");
+          renderDayReminders();
+        }
+      });
+
+      document.getElementById("cancel-button").addEventListener("click", () => dialog.close());
+      const objectiveKind = document.getElementById("objective-kind");
+      const objectiveTitle = document.getElementById("objective-title");
+      const objectiveTarget = document.getElementById("objective-target");
+      const objectivePeriod = document.getElementById("objective-period");
+      objectiveKind.addEventListener("change", () => {
+        const isIncomeGoal = objectiveKind.value === "income";
+        document.getElementById("objective-title-label").hidden = isIncomeGoal;
+        objectiveTitle.hidden = isIncomeGoal;
+        objectiveTitle.required = !isIncomeGoal;
+        objectiveTarget.parentElement.hidden = !isIncomeGoal;
+        objectiveTarget.required = isIncomeGoal;
+        objectivePeriod.querySelector('option[value="weekly"]').disabled = isIncomeGoal;
+        if (isIncomeGoal && objectivePeriod.value === "weekly") {
+          objectivePeriod.value = "monthly";
+        }
+      });
+      document.getElementById("objective-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const type = objectiveKind.value;
+        const title = type === "income" ? "Meta de ganancias" : objectiveTitle.value.trim();
+        if (type === "personal" && !title) {
+          document.getElementById("objective-error").textContent = "Escribe el objetivo que quieres lograr.";
+          return;
+        }
+        const targetAmount = Number(objectiveTarget.value);
+        if (type === "income" && (!Number.isFinite(targetAmount) || targetAmount <= 0)) {
+          document.getElementById("objective-error").textContent = "Escribe una meta de ganancias mayor que cero.";
+          return;
+        }
+
+        const now = new Date();
+        const objective = {
+          id: `${now.getTime()}-${Math.random().toString(36).slice(2)}`,
+          title,
+          type,
+          ...(type === "income" ? { targetAmount } : {}),
+          period: objectivePeriod.value,
+          createdOn: dateKey(now.getFullYear(), now.getMonth(), now.getDate()),
+          completed: false
+        };
+        if (persistObjectives([...objectives, objective])) {
+          objectiveTitle.value = "";
+          objectiveTarget.value = "";
+        }
+      });
+
+      const spaceMenuButton = document.getElementById("space-menu-button");
+      const spaceMenuOptions = document.getElementById("space-menu-options");
+      spaceMenuButton.addEventListener("click", () => {
+        const isExpanded = spaceMenuButton.getAttribute("aria-expanded") === "true";
+        spaceMenuButton.setAttribute("aria-expanded", String(!isExpanded));
+        spaceMenuOptions.hidden = isExpanded;
+      });
+      document.getElementById("objectives-nav").addEventListener("click", () => {
+        document.getElementById("calendar-view").hidden = true;
+        document.getElementById("objectives-view").hidden = false;
+        document.querySelector("header h1").textContent = "Objetivos";
+        document.querySelector("header .subtitle").textContent =
+          "Define tus objetivos personales y celebra cada avance.";
+        spaceMenuButton.setAttribute("aria-expanded", "false");
+        spaceMenuOptions.hidden = true;
+      });
+      document.getElementById("calendar-nav").addEventListener("click", () => {
+        document.getElementById("objectives-view").hidden = true;
+        document.getElementById("calendar-view").hidden = false;
+        document.querySelector("header h1").textContent = "Mi almanaque";
+        document.querySelector("header .subtitle").textContent =
+          "Cada día que avanzas cuenta. Lleva aquí el registro de tu trabajo.";
+        spaceMenuButton.setAttribute("aria-expanded", "false");
+        spaceMenuOptions.hidden = true;
+      });
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".space-menu")) {
+          spaceMenuButton.setAttribute("aria-expanded", "false");
+          spaceMenuOptions.hidden = true;
+        }
+      });
+
+      document.getElementById("reminder-button").addEventListener("click", () => {
+        if (window.AndroidReminder) {
+          window.AndroidReminder.enableReminders();
+        } else {
+          document.getElementById("reminder-status").textContent =
+            "Los recordatorios están disponibles al instalar la app en Android.";
+        }
+      });
+
+      window.setReminderStatus = (notificationsAllowed, exactAlarmAllowed) => {
+        const status = document.getElementById("reminder-status");
+        const button = document.getElementById("reminder-button");
+        if (!notificationsAllowed) {
+          status.textContent = "Permite las notificaciones para activar el aviso diario.";
+          button.textContent = "Activar";
+          button.disabled = false;
+        } else if (!exactAlarmAllowed) {
+          status.textContent =
+            "El aviso está programado; permite la hora exacta para que llegue a las 10:00 p. m.";
+          button.textContent = "Ajustar hora";
+          button.disabled = false;
+        } else {
+          status.textContent = "Recibirás un aviso todos los días a las 10:00 p. m.";
+          button.textContent = "Activado";
+          button.disabled = true;
+        }
+      };
+
+      document.getElementById("previous-month").addEventListener("click", () => {
+        visibleMonth -= 1;
+        if (visibleMonth < 0) {
+          visibleMonth = 11;
+          visibleYear -= 1;
+        }
+        render();
+      });
+      document.getElementById("next-month").addEventListener("click", () => {
+        visibleMonth += 1;
+        if (visibleMonth > 11) {
+          visibleMonth = 0;
+          visibleYear += 1;
+        }
+        render();
+      });
+
+      render();
+      renderObjectives();
+    })();
+  </script>
+</body>
+</html>
