@@ -1,0 +1,14 @@
+com.amanaque.trabajo:xml/progress_widget_info = 0x7f070000
+com.amanaque.trabajo:mipmap/ic_launcher_round = 0x7f050002
+com.amanaque.trabajo:string/progress_widget_description = 0x7f060000
+com.amanaque.trabajo:mipmap/ic_launcher = 0x7f050000
+com.amanaque.trabajo:drawable/progress_widget_background = 0x7f020000
+com.amanaque.trabajo:mipmap/ic_launcher_foreground = 0x7f050001
+com.amanaque.trabajo:layout/progress_widget = 0x7f040000
+com.amanaque.trabajo:id/widget_root = 0x7f030004
+com.amanaque.trabajo:id/widget_progress = 0x7f030003
+com.amanaque.trabajo:id/widget_objective = 0x7f030002
+com.amanaque.trabajo:id/widget_month = 0x7f030001
+com.amanaque.trabajo:id/widget_earnings = 0x7f030000
+com.amanaque.trabajo:id/widget_worked_days = 0x7f030005
+com.amanaque.trabajo:color/ic_launcher_background = 0x7f010000

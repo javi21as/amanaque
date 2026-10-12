@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#F7F6F2</color>
+    <string name="progress_widget_description">Muestra tus ganancias, días trabajados y avance de objetivos.</string>
+</resources>

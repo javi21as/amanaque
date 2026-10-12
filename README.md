@@ -2,6 +2,8 @@
 
 Aplicación Android personal para registrar días trabajados, días de descanso, ganancias y gastos de cada jornada. El resumen del calendario muestra por separado las ganancias y los gastos del mes. Al abrir un día también se pueden guardar recordatorios asociados a esa fecha; aparecen marcados discretamente en el calendario y se pueden mostrar u ocultar con el botón **Ver recordatorios**. Los datos se guardan en el dispositivo. Desde el menú **Mi espacio** se pueden crear objetivos personales semanales, mensuales o anuales, y metas de ganancias mensuales o anuales cuyo progreso se calcula a partir de los días trabajados registrados.
 
+La app muestra su icono en el inicio del teléfono. Para añadir el widget **Mi almanaque**, mantén pulsado un espacio vacío de la pantalla de inicio, abre **Widgets** y selecciónalo. Muestra las ganancias y los días trabajados del mes, además del progreso de tus objetivos, y se actualiza al guardar cambios en la app.
+
 La app incluye un recordatorio diario para las 10:00 p. m. Pulsa **Activar** en la pantalla del calendario y permite las notificaciones. Para que Android lo entregue a la hora exacta, permite también las alarmas exactas en la configuración del sistema; sin ese permiso, Android puede retrasar el aviso.
 
 ## Generar el APK

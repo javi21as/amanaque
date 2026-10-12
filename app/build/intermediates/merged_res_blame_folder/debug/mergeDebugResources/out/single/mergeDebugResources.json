@@ -1,0 +1,82 @@
+[
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-hdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-xxxhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.amanaque.trabajo.app-debug-4:/drawable_progress_widget_background.xml.flat",
+        "source": "com.amanaque.trabajo.app-main-6:/drawable/progress_widget_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-xxhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-xhdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.amanaque.trabajo.app-debug-4:/layout_progress_widget.xml.flat",
+        "source": "com.amanaque.trabajo.app-main-6:/layout/progress_widget.xml"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-mdpi\\ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.amanaque.trabajo.app-debug-4:/xml_progress_widget_info.xml.flat",
+        "source": "com.amanaque.trabajo.app-main-6:/xml/progress_widget_info.xml"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-debug-4:\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-main-6:\\mipmap-xhdpi\\ic_launcher_round.png"
+    }
+]

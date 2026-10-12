@@ -318,6 +318,7 @@
       .day { min-height: 59px; border-radius: 12px; }
       .day-state { font-size: 8px; }
     }
+    .backup-buttons { display: flex; flex-direction: column; gap: 6px; }
   </style>
 </head>
 <body>
@@ -377,6 +378,16 @@
         <span id="reminder-status">Activa el aviso para recibir una notificación cada día.</span>
       </div>
       <button class="reminder-button" id="reminder-button" type="button">Activar</button>
+    </aside>
+    <aside class="reminder-card" aria-label="Copia de seguridad">
+      <div class="reminder-copy">
+        <strong>Copia de seguridad</strong>
+        <span>Guarda tus datos en un archivo o restáuralos. Importar reemplaza los datos actuales.</span>
+      </div>
+      <div class="backup-buttons">
+        <button class="reminder-button" id="backup-export" type="button">Exportar</button>
+        <button class="reminder-button" id="backup-import" type="button">Importar</button>
+      </div>
     </aside>
     <div class="notice" id="notice" role="status" aria-live="polite"></div>
     </div>
@@ -517,6 +528,7 @@
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(nextEntries));
           entries = nextEntries;
+          syncProgressWidget();
           notice.textContent = "";
           render();
           renderObjectives();
@@ -531,6 +543,7 @@
         try {
           localStorage.setItem(OBJECTIVES_STORAGE_KEY, JSON.stringify(nextObjectives));
           objectives = nextObjectives;
+          syncProgressWidget();
           document.getElementById("objective-error").textContent = "";
           renderObjectives();
           return true;
@@ -538,6 +551,15 @@
           document.getElementById("objective-error").textContent =
             "No se pudieron guardar los objetivos en este dispositivo.";
           return false;
+        }
+      }
+
+      function syncProgressWidget() {
+        if (window.AndroidProgressWidget) {
+          window.AndroidProgressWidget.updateProgress(
+            JSON.stringify(entries),
+            JSON.stringify(objectives)
+          );
         }
       }
 
@@ -960,8 +982,77 @@
         render();
       });
 
+      // ---- Copia de seguridad: exportar / importar ----
+      let noticeTimer = null;
+      function showNotice(text, ok) {
+        notice.textContent = text;
+        notice.style.color = ok ? "var(--green)" : "";
+        clearTimeout(noticeTimer);
+        noticeTimer = setTimeout(() => {
+          notice.textContent = "";
+          notice.style.color = "";
+        }, 6000);
+      }
+
+      document.getElementById("backup-export").addEventListener("click", () => {
+        if (!window.AndroidBackup) {
+          showNotice("La copia de seguridad está disponible al instalar la app en Android.", false);
+          return;
+        }
+        window.AndroidBackup.exportData(JSON.stringify({
+          app: "mi-almanaque",
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          entries,
+          objectives,
+          reminders
+        }, null, 2));
+      });
+
+      document.getElementById("backup-import").addEventListener("click", () => {
+        if (!window.AndroidBackup) {
+          showNotice("La copia de seguridad está disponible al instalar la app en Android.", false);
+          return;
+        }
+        window.AndroidBackup.importData();
+      });
+
+      // Kotlin llama a esta función con el contenido del archivo elegido.
+      window.applyBackup = (json) => {
+        const keys = [STORAGE_KEY, OBJECTIVES_STORAGE_KEY, REMINDERS_STORAGE_KEY];
+        const previous = keys.map((key) => localStorage.getItem(key));
+        try {
+          const data = JSON.parse(json);
+          if (!data || data.app !== "mi-almanaque") throw new Error("Archivo no válido");
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(data.entries ?? {}));
+          localStorage.setItem(OBJECTIVES_STORAGE_KEY, JSON.stringify(data.objectives ?? []));
+          localStorage.setItem(REMINDERS_STORAGE_KEY, JSON.stringify(data.reminders ?? {}));
+          // Si el formato está mal, estas funciones lanzan error y se restaura lo anterior.
+          entries = loadEntries();
+          objectives = loadObjectives();
+          reminders = loadReminders();
+          render();
+          renderObjectives();
+          syncProgressWidget();
+          showNotice("Copia restaurada correctamente.", true);
+        } catch (error) {
+          keys.forEach((key, i) => {
+            if (previous[i] === null) localStorage.removeItem(key);
+            else localStorage.setItem(key, previous[i]);
+          });
+          entries = loadEntries();
+          objectives = loadObjectives();
+          reminders = loadReminders();
+          showNotice("Ese archivo no es una copia válida de Mi almanaque.", false);
+        }
+      };
+
+      // Kotlin la usa para avisar si se guardó o no.
+      window.backupMessage = (text, ok) => showNotice(text, ok);
+
       render();
       renderObjectives();
+      syncProgressWidget();
     })();
   </script>
 </body>

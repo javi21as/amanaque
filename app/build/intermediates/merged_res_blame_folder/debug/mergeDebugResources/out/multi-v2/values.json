@@ -1,0 +1,56 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.amanaque.trabajo.app-mergeDebugResources-2:/values/values.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\PC\\OneDrive\\Desktop\\amanaque\\app\\src\\main\\res\\values\\ic_launcher_background.xml",
+                    "from": {
+                        "startLines": "-1",
+                        "startColumns": "-1",
+                        "startOffsets": "-1"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "56",
+                        "endOffsets": "107"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\PC\\OneDrive\\Desktop\\amanaque\\app\\src\\main\\res\\values\\progress_widget_strings.xml",
+                    "from": {
+                        "startLines": "1",
+                        "startColumns": "4",
+                        "startOffsets": "17",
+                        "endColumns": "117",
+                        "endOffsets": "130"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "112",
+                        "endColumns": "117",
+                        "endOffsets": "225"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "C:\\Users\\PC\\.gradle\\daemon\\9.6.0\\com.amanaque.trabajo.app-mergeDebugResources-2:\\values\\values.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\PC\\OneDrive\\Desktop\\amanaque\\app\\src\\main\\res\\values\\ic_launcher_background.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "56",
+                        "endOffsets": "107"
+                    }
+                }
+            ]
+        }
+    ]
+}
